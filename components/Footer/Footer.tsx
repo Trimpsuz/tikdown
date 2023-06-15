@@ -1,6 +1,4 @@
 import { createStyles, Container, Text, Box, Anchor } from '@mantine/core';
-import TestausserveriLogo from '../../public/testausserveri.svg';
-import Image from 'next/image';
 import { Poppins } from '@next/font/google';
 
 const poppins = Poppins({
@@ -30,15 +28,8 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan('xs')]: {
       flexDirection: 'column',
     },
-  },
-
-  logo: {
-    fill: theme.colorScheme === 'dark' ? 'white' : 'black',
-    opacity: '0.8',
-    transition: 'opacity 0.2s !important',
-    ':hover': {
-      opacity: '1',
-    },
+    float: 'right',
+    paddingRight: '25vh',
   },
 }));
 
@@ -48,11 +39,13 @@ export function Footer() {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <a href="https://testausserveri.fi">
-          <Image src={TestausserveriLogo} className={classes.logo} height={60} alt="Testausserveri Logo" />
-        </a>
         <Box>
-          <Text>© {new Date().getFullYear()} Testausserveri ry & contributors</Text>
+          <Text>
+            © {new Date().getFullYear()}{' '}
+            <Anchor style={{ textDecoration: 'none' }} href="https://trimpsuz.xyz">
+              Trimpsuz
+            </Anchor>
+          </Text>
           <Text
             style={{ textDecoration: 'none', transition: 'text-decoration 0.3s' }}
             onMouseEnter={(event) => {
@@ -62,8 +55,8 @@ export function Footer() {
               event.currentTarget.style.textDecoration = 'none';
             }}
             component="a"
-            href="https://github.com/Testausserveri/testaus.link"
-            color="#23bde7"
+            href="https://github.com/Trimpsuz/tikdown"
+            color="#e534af"
           >
             Source code
           </Text>
