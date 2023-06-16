@@ -1,5 +1,5 @@
 import { createStyles, Container, Text, TextInput, Button, keyframes } from '@mantine/core';
-import { Link1Icon, DownloadIcon } from '@radix-ui/react-icons';
+import { Link1Icon, DownloadIcon, ArrowLeftIcon } from '@radix-ui/react-icons';
 import type { NextPage } from 'next';
 import Footer from '../components/Footer';
 import { useState, ChangeEvent } from 'react';
@@ -57,6 +57,25 @@ const useStyles = createStyles((theme) => ({
   },
   downloadButton: {
     marginRight: theme.spacing.md,
+    marginBottom: theme.spacing.xl,
+    ':last-child': {
+      marginRight: 0,
+    },
+  },
+  buttonRow: {
+    display: 'flex',
+  },
+  downloadControls: {
+    marginTop: theme.spacing.xl * 2,
+
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+
+    [`@media (max-width: ${BREAKPOINT})`]: {
+      marginTop: theme.spacing.xl,
+    },
   },
 }));
 
@@ -96,14 +115,85 @@ const Home: NextPage = () => {
     <>
       <Container size={700} className={classes.inner}>
         <Text className={classes.header}>{data.aweme_list[0].author.nickname}'s video</Text>
-        <div className={classes.controls}>
+        <div className={classes.downloadControls}>
+          <div className={classes.buttonRow}>
+            <Button
+              component="a"
+              href={data.aweme_list[0].video.play_addr.url_list[0]}
+              leftIcon={<DownloadIcon />}
+              styles={(theme) => ({
+                root: {
+                  backgroundColor: '#e534af',
+                  fontSize: 16,
+                  fontWeight: 500,
+                  border: 0,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+
+                  '&:hover': {
+                    backgroundColor: theme.fn.darken('#e534af', 0.1),
+                  },
+                },
+              })}
+              size="md"
+              className={classes.downloadButton}
+            >
+              Download video
+            </Button>
+            <Button
+              component="a"
+              href={data.aweme_list[0].video.download_addr.url_list[0]}
+              leftIcon={<DownloadIcon />}
+              styles={(theme) => ({
+                root: {
+                  backgroundColor: '#e534af',
+                  fontSize: 16,
+                  fontWeight: 500,
+                  border: 0,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+
+                  '&:hover': {
+                    backgroundColor: theme.fn.darken('#e534af', 0.1),
+                  },
+                },
+              })}
+              size="md"
+              className={classes.downloadButton}
+            >
+              Download video (watermark)
+            </Button>
+            <Button
+              component="a"
+              href={data.aweme_list[0].music.play_url.url_list[0]}
+              leftIcon={<DownloadIcon />}
+              styles={(theme) => ({
+                root: {
+                  backgroundColor: '#e534af',
+                  fontSize: 16,
+                  fontWeight: 500,
+                  border: 0,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+
+                  '&:hover': {
+                    backgroundColor: theme.fn.darken('#e534af', 0.1),
+                  },
+                },
+              })}
+              size="md"
+              className={classes.downloadButton}
+            >
+              Download sound
+            </Button>
+          </div>
           <Button
             component="a"
-            href={data.aweme_list[0].video.play_addr.url_list[0]}
-            leftIcon={<DownloadIcon />}
+            href={'/'}
+            leftIcon={<ArrowLeftIcon />}
             styles={(theme) => ({
               root: {
-                backgroundColor: '#e534af',
+                color: '#e534af',
                 fontSize: 16,
                 fontWeight: 500,
                 border: 0,
@@ -111,60 +201,15 @@ const Home: NextPage = () => {
                 paddingRight: 20,
 
                 '&:hover': {
-                  backgroundColor: theme.fn.darken('#e534af', 0.1),
+                  color: theme.fn.darken('#e534af', 0.1),
+                  backgroundColor: theme.fn.darken('#e534af', 0.65),
                 },
               },
             })}
+            variant="outline"
             size="md"
-            className={classes.downloadButton}
           >
-            Download video
-          </Button>
-          <Button
-            component="a"
-            href={data.aweme_list[0].video.download_addr.url_list[0]}
-            leftIcon={<DownloadIcon />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: '#e534af',
-                fontSize: 16,
-                fontWeight: 500,
-                border: 0,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken('#e534af', 0.1),
-                },
-              },
-            })}
-            size="md"
-            className={classes.downloadButton}
-          >
-            Download video (Watermark)
-          </Button>
-          <Button
-            component="a"
-            href={data.aweme_list[0].music.play_url.url_list[0]}
-            leftIcon={<DownloadIcon />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: '#e534af',
-                fontSize: 16,
-                fontWeight: 500,
-                border: 0,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken('#e534af', 0.1),
-                },
-              },
-            })}
-            size="md"
-            className={classes.downloadButton}
-          >
-            Download sound
+            Download another
           </Button>
         </div>
       </Container>
