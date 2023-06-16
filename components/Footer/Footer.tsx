@@ -42,9 +42,20 @@ export function Footer() {
         <Box>
           <Text>
             © {new Date().getFullYear()}{' '}
-            <Anchor style={{ textDecoration: 'none' }} href="https://trimpsuz.xyz">
+            <Text
+              style={{ textDecoration: 'none', transition: 'text-decoration 0.3s' }}
+              onMouseEnter={(event) => {
+                event.currentTarget.style.textDecoration = 'underline';
+              }}
+              onMouseLeave={(event) => {
+                event.currentTarget.style.textDecoration = 'none';
+              }}
+              component="a"
+              href="https://trimpsuz.xyz"
+              color="#e534af"
+            >
               Trimpsuz
-            </Anchor>
+            </Text>
           </Text>
           <Text
             style={{ textDecoration: 'none', transition: 'text-decoration 0.3s' }}

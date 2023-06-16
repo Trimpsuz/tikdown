@@ -2,7 +2,7 @@ import { createStyles, Container, Text, TextInput, Button, keyframes } from '@ma
 import { Link1Icon } from '@radix-ui/react-icons';
 import type { NextPage } from 'next';
 import Footer from '../components/Footer';
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 
 const BREAKPOINT = 755;
@@ -57,7 +57,25 @@ const useStyles = createStyles((theme) => ({
 const Home: NextPage = () => {
   const { classes } = useStyles();
 
-  async function handleClick() {}
+  const [text, setText] = useState('');
+
+  const [data, setData] = useState(null);
+
+  async function handleClick() {
+    if (/(https?:\/\/)?(www\.)?tiktok\.com\/@([^/]+)\/video\/(\d+)\/?/.test(text)) {
+      const id = text.match(/\/(\d{19})\/?$/);
+      if (id) {
+        const res = await axios.get(`https://corsproxy.io/?https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${id[1]}`);
+        setData(res.data);
+      }
+    } else {
+      console.log('Invalid URL');
+    }
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+    setText(event.target.value);
+  }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
@@ -65,7 +83,9 @@ const Home: NextPage = () => {
     }
   };
 
-  return (
+  return data ? (
+    <></>
+  ) : (
     <>
       <Container size={700} className={classes.inner}>
         <h1 className={classes.title}>
@@ -74,7 +94,7 @@ const Home: NextPage = () => {
           </Text>
         </h1>
         <div className={classes.controls} style={{ display: 'flex', alignItems: 'center' }}>
-          <TextInput onKeyDown={handleKeyDown} style={{ marginRight: 8, flex: 1 }} placeholder="Tiktok URL" size="md" icon={<Link1Icon />} />
+          <TextInput onChange={handleChange} onKeyDown={handleKeyDown} style={{ marginRight: 8, flex: 1 }} placeholder="Tiktok URL" size="md" icon={<Link1Icon />} />
           <Button
             styles={(theme) => ({
               root: {

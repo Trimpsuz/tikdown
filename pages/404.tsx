@@ -56,7 +56,7 @@ const PageNotFound: NextPage = () => {
         Unfortunately, the page you requested was not found on this site. You may have mistyped the address, or the page may have been moved to another URL.
       </Text>
       <Group position="center">
-        <Button component="a" href="/" variant="subtle" size="md">
+        <Button component="a" href="/" variant="subtle" color="" size="md">
           Take me back to the home page
         </Button>
       </Group>
