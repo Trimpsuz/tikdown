@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
     marginTop: theme.spacing.xl * 2,
 
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
 
     [`@media (max-width: ${BREAKPOINT})`]: {
@@ -86,23 +86,46 @@ const Home: NextPage = () => {
 
   const [data, setData] = useState<any | null>(null);
 
+  const [video, setVideo] = useState(false);
+
+  const [error, setError] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
-    if (/(https?:\/\/)?(www\.)?tiktok\.com\/@([^/]+)\/video\/(\d+)\/?/.test(text)) {
-      const id = text.match(/\/(\d{19})\/?$/);
+    if (/^(https?:\/\/)?(vm|vt)\.tiktok\.com\/.*$/.test(text)) {
+      setLoading(true);
+      const res = await axios.get(`/api/download?mobile=${text}`);
+
+      if (res.data.video) {
+        setVideo(res.data.video);
+      } else if (res.data.image) {
+        setVideo(!res.data.image);
+      }
+      setData(res.data);
+    } else {
+      const id = text.match(/\/?(\d{19})\/?$/);
       if (id) {
         setLoading(true);
-        const res = await axios.get(`https://corsproxy.io/?https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${id[1]}`);
+        const res = await axios.get(`/api/download?aweme_id=${id[1]}`, { maxRedirects: 0, validateStatus: null });
+
+        if (res.data.video) {
+          setVideo(res.data.video);
+        } else if (res.data.image) {
+          setVideo(!res.data.image);
+        }
+
         setData(res.data);
+      } else {
+        console.log('Invalid URL');
+        setError('Invalid URL');
       }
-    } else {
-      console.log('Invalid URL');
     }
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     setText(event.target.value);
+    setError('');
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -113,108 +136,199 @@ const Home: NextPage = () => {
 
   return data ? (
     <>
-      <Container size={700} className={classes.inner}>
-        <Text className={classes.header}>{data.aweme_list[0].author.nickname}'s video</Text>
-        <div className={classes.downloadControls}>
-          <div className={classes.buttonRow}>
-            <Button
-              component="a"
-              href={data.aweme_list[0].video.play_addr.url_list[0]}
-              leftIcon={<DownloadIcon />}
-              styles={(theme) => ({
-                root: {
-                  backgroundColor: '#e534af',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  border: 0,
-                  paddingLeft: 20,
-                  paddingRight: 20,
+      {video ? (
+        <>
+          <Container size={700} className={classes.inner}>
+            <Text className={classes.header}>{data.author}'s video</Text>
+            <div className={classes.downloadControls}>
+              <div className={classes.buttonRow}>
+                <Button
+                  component="a"
+                  href={data.video0}
+                  leftIcon={<DownloadIcon />}
+                  styles={(theme) => ({
+                    root: {
+                      backgroundColor: '#e534af',
+                      fontSize: 16,
+                      fontWeight: 500,
+                      border: 0,
+                      paddingLeft: 20,
+                      paddingRight: 20,
 
-                  '&:hover': {
-                    backgroundColor: theme.fn.darken('#e534af', 0.1),
+                      '&:hover': {
+                        backgroundColor: theme.fn.darken('#e534af', 0.1),
+                      },
+                    },
+                  })}
+                  size="md"
+                  className={classes.downloadButton}
+                >
+                  Download video
+                </Button>
+                <Button
+                  component="a"
+                  href={data.video1}
+                  leftIcon={<DownloadIcon />}
+                  styles={(theme) => ({
+                    root: {
+                      backgroundColor: '#e534af',
+                      fontSize: 16,
+                      fontWeight: 500,
+                      border: 0,
+                      paddingLeft: 20,
+                      paddingRight: 20,
+
+                      '&:hover': {
+                        backgroundColor: theme.fn.darken('#e534af', 0.1),
+                      },
+                    },
+                  })}
+                  size="md"
+                  className={classes.downloadButton}
+                >
+                  Download video (watermark)
+                </Button>
+                <Button
+                  component="a"
+                  href={data.sound}
+                  leftIcon={<DownloadIcon />}
+                  styles={(theme) => ({
+                    root: {
+                      backgroundColor: '#e534af',
+                      fontSize: 16,
+                      fontWeight: 500,
+                      border: 0,
+                      paddingLeft: 20,
+                      paddingRight: 20,
+
+                      '&:hover': {
+                        backgroundColor: theme.fn.darken('#e534af', 0.1),
+                      },
+                    },
+                  })}
+                  size="md"
+                  className={classes.downloadButton}
+                >
+                  Download sound
+                </Button>
+              </div>
+              <Button
+                component="a"
+                href={'/'}
+                leftIcon={<ArrowLeftIcon />}
+                styles={(theme) => ({
+                  root: {
+                    color: '#e534af',
+                    fontSize: 16,
+                    fontWeight: 500,
+                    border: 0,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+
+                    '&:hover': {
+                      color: theme.fn.darken('#e534af', 0.1),
+                      backgroundColor: theme.fn.darken('#e534af', 0.65),
+                    },
                   },
-                },
-              })}
-              size="md"
-              className={classes.downloadButton}
-            >
-              Download video
-            </Button>
-            <Button
-              component="a"
-              href={data.aweme_list[0].video.download_addr.url_list[0]}
-              leftIcon={<DownloadIcon />}
-              styles={(theme) => ({
-                root: {
-                  backgroundColor: '#e534af',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  border: 0,
-                  paddingLeft: 20,
-                  paddingRight: 20,
+                })}
+                variant="outline"
+                size="md"
+              >
+                Download another
+              </Button>
+            </div>
+          </Container>
 
-                  '&:hover': {
-                    backgroundColor: theme.fn.darken('#e534af', 0.1),
+          <Footer></Footer>
+        </>
+      ) : (
+        <>
+          <Container size={700} className={classes.inner}>
+            <Text className={classes.header}>{data.author}'s images</Text>
+            <div className={classes.downloadControls}>
+              <div className={classes.buttonRow}>
+                {data.images.map((image: string, index: number) => (
+                  <Button
+                    key={index}
+                    component="a"
+                    href={image}
+                    target="_"
+                    leftIcon={<DownloadIcon />}
+                    styles={(theme) => ({
+                      root: {
+                        backgroundColor: '#e534af',
+                        fontSize: 16,
+                        fontWeight: 500,
+                        border: 0,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+
+                        '&:hover': {
+                          backgroundColor: theme.fn.darken('#e534af', 0.1),
+                        },
+                      },
+                    })}
+                    size="md"
+                    className={classes.downloadButton}
+                  >
+                    Download image
+                  </Button>
+                ))}
+
+                <Button
+                  component="a"
+                  href={data.sound}
+                  leftIcon={<DownloadIcon />}
+                  styles={(theme) => ({
+                    root: {
+                      backgroundColor: '#e534af',
+                      fontSize: 16,
+                      fontWeight: 500,
+                      border: 0,
+                      paddingLeft: 20,
+                      paddingRight: 20,
+
+                      '&:hover': {
+                        backgroundColor: theme.fn.darken('#e534af', 0.1),
+                      },
+                    },
+                  })}
+                  size="md"
+                  className={classes.downloadButton}
+                >
+                  Download sound
+                </Button>
+              </div>
+              <Button
+                component="a"
+                href={'/'}
+                leftIcon={<ArrowLeftIcon />}
+                styles={(theme) => ({
+                  root: {
+                    color: '#e534af',
+                    fontSize: 16,
+                    fontWeight: 500,
+                    border: 0,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+
+                    '&:hover': {
+                      color: theme.fn.darken('#e534af', 0.1),
+                      backgroundColor: theme.fn.darken('#e534af', 0.65),
+                    },
                   },
-                },
-              })}
-              size="md"
-              className={classes.downloadButton}
-            >
-              Download video (watermark)
-            </Button>
-            <Button
-              component="a"
-              href={data.aweme_list[0].music.play_url.url_list[0]}
-              leftIcon={<DownloadIcon />}
-              styles={(theme) => ({
-                root: {
-                  backgroundColor: '#e534af',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  border: 0,
-                  paddingLeft: 20,
-                  paddingRight: 20,
+                })}
+                variant="outline"
+                size="md"
+              >
+                Download another
+              </Button>
+            </div>
+          </Container>
 
-                  '&:hover': {
-                    backgroundColor: theme.fn.darken('#e534af', 0.1),
-                  },
-                },
-              })}
-              size="md"
-              className={classes.downloadButton}
-            >
-              Download sound
-            </Button>
-          </div>
-          <Button
-            component="a"
-            href={'/'}
-            leftIcon={<ArrowLeftIcon />}
-            styles={(theme) => ({
-              root: {
-                color: '#e534af',
-                fontSize: 16,
-                fontWeight: 500,
-                border: 0,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  color: theme.fn.darken('#e534af', 0.1),
-                  backgroundColor: theme.fn.darken('#e534af', 0.65),
-                },
-              },
-            })}
-            variant="outline"
-            size="md"
-          >
-            Download another
-          </Button>
-        </div>
-      </Container>
-
-      <Footer></Footer>
+          <Footer></Footer>
+        </>
+      )}
     </>
   ) : (
     <>
@@ -225,7 +339,7 @@ const Home: NextPage = () => {
           </Text>
         </h1>
         <div className={classes.controls}>
-          <TextInput onChange={handleChange} onKeyDown={handleKeyDown} style={{ marginRight: 8, flex: 1 }} placeholder="Tiktok URL or video ID" size="md" icon={<Link1Icon />} />
+          <TextInput error={error} onChange={handleChange} onKeyDown={handleKeyDown} style={{ marginRight: 8, flex: 1 }} placeholder="Tiktok URL or video ID" size="md" icon={<Link1Icon />} />
           <Button
             loading={loading}
             loaderPosition="right"
