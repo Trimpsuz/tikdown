@@ -51,7 +51,7 @@ export function Footer() {
                 event.currentTarget.style.textDecoration = 'none';
               }}
               component="a"
-              href="https://trimpsuz.xyz"
+              href="https://trimpsuz.dev"
               color="#e534af"
             >
               Trimpsuz
