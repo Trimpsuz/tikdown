@@ -5,13 +5,19 @@ import Footer from '../components/Footer';
 import { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 
-const BREAKPOINT = 755;
-
 const useStyles = createStyles((theme) => ({
   inner: {
     position: 'relative',
+    paddingTop: '15vh',
+    [theme.fn.smallerThan('sm')]: {
+      paddingBottom: 80,
+      paddingTop: 80,
+    },
+  },
+  inner2: {
+    position: 'relative',
     paddingTop: '32vh',
-    [`@media (max-width: ${BREAKPOINT})`]: {
+    [theme.fn.smallerThan('sm')]: {
       paddingBottom: 80,
       paddingTop: 80,
     },
@@ -25,7 +31,7 @@ const useStyles = createStyles((theme) => ({
     padding: 0,
     color: theme.white,
 
-    [`@media (max-width: ${BREAKPOINT})`]: {
+    [theme.fn.smallerThan('sm')]: {
       fontSize: 42,
       lineHeight: 1.2,
     },
@@ -37,7 +43,7 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'flex-start',
     justifyContent: 'center',
 
-    [`@media (max-width: ${BREAKPOINT})`]: {
+    [theme.fn.smallerThan('sm')]: {
       marginTop: theme.spacing.xl,
     },
   },
@@ -46,35 +52,44 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 900,
     lineHeight: 1.1,
     marginTop: theme.spacing.xl,
+    marginBottom: theme.spacing.xl,
     textAlign: 'center',
     padding: 0,
     color: theme.white,
 
-    [`@media (max-width: ${BREAKPOINT})`]: {
+    [theme.fn.smallerThan('sm')]: {
       fontSize: 42,
       lineHeight: 1.2,
     },
   },
   downloadButton: {
-    marginRight: theme.spacing.md,
-    marginBottom: theme.spacing.xl,
-    ':last-child': {
-      marginRight: 0,
-    },
+    backgroundColor: '#e534af',
+    fontSize: 16,
+    fontWeight: 500,
+    border: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
+    margin: '8px',
+    flexGrow: 1,
   },
   buttonRow: {
     display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   downloadControls: {
     marginTop: theme.spacing.xl * 2,
+    maxWidth: '100vw',
+    margin: '0 auto',
 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column',
+    flexWrap: 'wrap',
 
-    [`@media (max-width: ${BREAKPOINT})`]: {
+    [theme.fn.smallerThan('sm')]: {
       marginTop: theme.spacing.xl,
+      paddingBottom: 50,
     },
   },
 }));
@@ -332,7 +347,7 @@ const Home: NextPage = () => {
     </>
   ) : (
     <>
-      <Container size={700} className={classes.inner}>
+      <Container size={700} className={classes.inner2}>
         <h1 className={classes.title}>
           <Text component="span" variant="gradient" gradient={{ from: '#7d34e7', to: '#e534af' }} inherit>
             tikdown
