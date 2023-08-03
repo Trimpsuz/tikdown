@@ -1,4 +1,4 @@
-import { createStyles, Container, Text, TextInput, Button, keyframes } from '@mantine/core';
+import { createStyles, Container, Text, TextInput, Button } from '@mantine/core';
 import { Link1Icon, DownloadIcon, ArrowLeftIcon } from '@radix-ui/react-icons';
 import type { NextPage } from 'next';
 import Footer from '../components/Footer';
