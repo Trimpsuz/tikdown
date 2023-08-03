@@ -39,8 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         resObject['author'] = response.data.aweme_list[0].author.unique_id;
       }
 
-      console.log(resObject);
-
       res.status(200).json(resObject);
     } else {
       res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
@@ -76,9 +74,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           resObject['sound'] = resp.data.aweme_list[0].music.play_url.url_list[0];
           resObject['author'] = resp.data.aweme_list[0].author.unique_id;
         }
-
-        console.log(resObject);
-
         res.status(200).json(resObject);
       } else {
         res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
@@ -89,6 +84,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else {
     res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
   }
-
-  console.log(req.query);
 }
