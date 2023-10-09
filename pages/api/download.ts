@@ -59,8 +59,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (resp.data.aweme_list[0].image_post_info) {
           resObject['image'] = true;
 
+          resObject.images = [];
+
           for (let i = 0; i < resp.data.aweme_list[0].image_post_info.images.length; i++) {
-            resObject[`image${i}`] = resp.data.aweme_list[0].image_post_info.images[i].display_image.url_list[1];
+            resObject.images.push(resp.data.aweme_list[0].image_post_info.images[i].display_image.url_list[1]);
           }
 
           resObject['sound'] = resp.data.aweme_list[0].music.play_url.url_list[0];
