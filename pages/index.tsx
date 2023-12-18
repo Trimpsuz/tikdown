@@ -119,7 +119,7 @@ const Home: NextPage = () => {
       }
       setData(res.data);
     } else {
-      const id = text.match(/\/?(\d{19})\/?$/);
+      const id = text.split('?')[0].match(/\/?(\d{19})\/?$/);
       if (id) {
         setLoading(true);
         const res = await axios.get(`/api/download?aweme_id=${id[1]}`, { maxRedirects: 0, validateStatus: null });
