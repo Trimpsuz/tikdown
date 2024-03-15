@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (/^(?!https?:\/\/)(vm|vt)\.tiktok\.com\/.*$/.test(firstQueryParam)) firstQueryParam = 'https://' + firstQueryParam;
 
   if (Object.keys(req.query)[0] === 'aweme_id' && /^[0-9]{19}$/.test(firstQueryParam)) {
-    const response = await axios.get(`https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${firstQueryParam}`).catch(() => {
+    const response = await axios.get(`https://api16-normal-c-useast2a.tiktokv.com/aweme/v1/feed/?aweme_id=${firstQueryParam}`).catch(() => {
       res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
     });
 
@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (response) {
       const id = response.headers.location.match(/\b\d{19}\b/)[0];
 
-      const resp = await axios.get(`https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id=${id}`);
+      const resp = await axios.get(`https://api16-normal-c-useast2a.tiktokv.com/aweme/v1/feed/?aweme_id=${id}`);
 
       let resObject: { [key: string]: any } = {};
 
