@@ -11,9 +11,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (/^(?!https?:\/\/)(vm|vt)\.tiktok\.com\/.*$/.test(firstQueryParam)) firstQueryParam = 'https://' + firstQueryParam;
 
   if (Object.keys(req.query)[0] === 'aweme_id' && /^[0-9]{19}$/.test(firstQueryParam)) {
-    const response = await axios.get(`https://api16-normal-c-useast2a.tiktokv.com/aweme/v1/feed/?aweme_id=${firstQueryParam}`).catch(() => {
-      res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
-    });
+    const response = await axios
+      .get(
+        `https://api22-normal-c-alisg.tiktokv.com/aweme/v1/feed/?iid=7318518857994389254&device_id=7318517321748022790&channel=googleplay&app_name=musical_ly&version_code=300904&device_platform=android&device_type=ASUS_Z01QD&os_version=9&aweme_id=${firstQueryParam}`,
+        {
+          headers: {
+            'User-Agent': 'TikTok 26.2.0 rv:262018 (iPhone; iOS 14.4.2; en_US) Cronet',
+          },
+        }
+      )
+      .catch(() => {
+        res.status(400).send(`Invalid request: Missing or invalid query parameter ${firstQueryParam}.`);
+      });
 
     let resObject: { [key: string]: any } = {};
 
@@ -51,7 +60,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (response) {
       const id = response.headers.location.match(/\b\d{19}\b/)[0];
 
-      const resp = await axios.get(`https://api16-normal-c-useast2a.tiktokv.com/aweme/v1/feed/?aweme_id=${id}`);
+      const resp = await axios.get(
+        `https://api22-normal-c-alisg.tiktokv.com/aweme/v1/feed/?iid=7318518857994389254&device_id=7318517321748022790&channel=googleplay&app_name=musical_ly&version_code=300904&device_platform=android&device_type=ASUS_Z01QD&os_version=9&aweme_id=${id}`,
+        {
+          headers: {
+            'User-Agent': 'TikTok 26.2.0 rv:262018 (iPhone; iOS 14.4.2; en_US) Cronet',
+          },
+        }
+      );
 
       let resObject: { [key: string]: any } = {};
 
