@@ -1,5 +1,5 @@
 import { createStyles, Container, Text, Box, Anchor } from '@mantine/core';
-import { Poppins } from '@next/font/google';
+import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
   weight: ['500', '400', '900'],
